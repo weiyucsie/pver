@@ -1,0 +1,18 @@
+.for bdb_ver in 3 4 41 42 43 44 45 46 47 48 5 6
+.if exists(${LOCALBASE}/include/db${bdb_ver})
+BDB_VER?=		${bdb_ver}
+.endif
+.endfor
+
+.ifdef BSD_DB
+CFLAGS+=		-DBSD_DB
+.else
+CFLAGS+=		-I${LOCALBASE}/include/db${BDB_VER} -DBDB_VER=${BDB_VER}
+.if exists(${LOCALBASE}/lib/db${BDB_VER})
+BDB_LIB_DIR?=		${LOCALBASE}/lib/db${BDB_VER}
+LDFLAGS+=		-L${BDB_LIB_DIR} -ldb
+.else
+BDB_LIB_DIR?=		${LOCALBASE}/lib
+LDFLAGS+=		-L${BDB_LIB_DIR} -ldb${BDB_VER}
+.endif
+.endif

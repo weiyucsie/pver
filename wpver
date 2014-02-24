@@ -1,0 +1,13 @@
+#!/bin/sh --
+os_ver=`uname -r|cut -d. -f 1`
+pver_index_file=$1
+pver_index_info_file='pver_info_db'
+if [ -n $pver_index_file ]; then
+  if [ -f ${pver_index_info_file} ]; then
+    pver_index_file=`cat ${pver_index_info_file}`
+  fi
+fi
+if [ /usr/ports/INDEX-${os_ver} -nt "$pver_index_file" ]; then
+  pver_dbgen $1
+fi
+pver
